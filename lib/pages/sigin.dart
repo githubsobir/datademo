@@ -1,7 +1,9 @@
+import 'package:datademo/pages/result.dart';
 import 'package:datademo/pages/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hive/hive.dart';
 
 class SignIn extends StatefulWidget {
   static final String id = "singin";
@@ -11,6 +13,18 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  var boxs = Hive.box("pdp_online");
+  var contName = TextEditingController();
+  var contPassword = TextEditingController();
+
+  void _actionButton() {
+    String name = contName.text.toString().trim();
+    String password = contPassword.text.toString().trim();
+    if (boxs.get("userName") == name && boxs.get("password") == password) {
+      Navigator.pushReplacementNamed(context, Result.id);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double widthSize = MediaQuery.of(context).size.width;
@@ -60,7 +74,8 @@ class _SignInState extends State<SignIn> {
                 height: widthSize * 0.1,
               ),
               TextField(
-                cursorWidth: widthSize * 0.4,
+                controller: contName,
+                style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                     focusColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
@@ -77,7 +92,8 @@ class _SignInState extends State<SignIn> {
                 height: widthSize * 0.1,
               ),
               TextField(
-                cursorWidth: widthSize * 0.4,
+                controller: contPassword,
+                style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                     focusColor: Colors.white,
                     enabledBorder: UnderlineInputBorder(
@@ -115,7 +131,9 @@ class _SignInState extends State<SignIn> {
                   ]),
                 ),
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    _actionButton();
+                  },
                   child: Center(
                     child: IconButton(
                       color: Colors.white,
@@ -123,7 +141,9 @@ class _SignInState extends State<SignIn> {
                         Icons.arrow_forward_rounded,
                         size: 33,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        _actionButton();
+                      },
                     ),
                   ),
                 ),
